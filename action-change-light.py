@@ -5,8 +5,7 @@ import ConfigParser
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
-#from RPi import GPIO
-#import logging
+from RPi import GPIO
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -26,37 +25,26 @@ def read_configuration_file(configuration_file):
 
 def subscribe_intent_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
-    #logging.debug('intent subscribed')
-    #action_wrapper(hermes, intentMessage, conf)
-    action_wrap(hermes, intentMessage)
+    action_wrapper(hermes, intentMessage, conf)
 
 def action_wrapper(hermes, intentMessage, conf):
-    #logging.debug('action wrapper')
     result_sentence = "Bonjour."
     if len(intentMessage.slots.state) > 0:
         state = intentMessage.slots.state.first().value
         if state == "on":
             result_sentence = "OK, allumage de la lampe."
-            #GPIO.output(14, GPIO.HIGH)
+            GPIO.output(14, GPIO.HIGH)
         else:
             result_sentence = "Compris, j'éteins la lampe."
-            #GPIO.output(14, GPIO.LOW)
+            GPIO.output(14, GPIO.LOW)
     else:
         result_sentence = "Nope"
-    ​
-    current_session_id = intentMessage.session_id
-    hermes.publish_end_session(current_session_id, result_sentence)
-
-def action_wrap(hermes, intentMessage):
-    result_sentence = "Bonjour le monde."
     current_session_id = intentMessage.session_id
     hermes.publish_end_session(current_session_id, result_sentence)
 
 if __name__ == "__main__":
-    #logging.basicConfig(filename='/home/pi/debug.log',level=logging.DEBUG)
-    #GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(14, GPIO.OUT)
-    #GPIO.output(14, GPIO.LOW)
-    #logging.debug('READY')
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(14, GPIO.OUT)
+    GPIO.output(14, GPIO.LOW)
     with Hermes("localhost:1883") as h:
         h.subscribe_intent("jumahe:change-light", subscribe_intent_callback).start()
