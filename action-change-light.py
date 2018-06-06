@@ -6,7 +6,7 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
 from RPi import GPIO
-#import logging
+import logging
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -26,12 +26,12 @@ def read_configuration_file(configuration_file):
 
 def subscribe_intent_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
-    #logging.debug('intent subscribed')
+    logging.debug('intent subscribed')
     action_wrapper(hermes, intentMessage, conf)
     #action_wrap(hermes, intentMessage)
 
 def action_wrapper(hermes, intentMessage, conf):
-    #logging.debug('action wrapper')
+    logging.debug('action wrapper')
     result_sentence = "Bonjour le monde."
     if len(intentMessage.slots.state) > 0:
         state = intentMessage.slots.state.first().value
@@ -53,10 +53,10 @@ def action_wrap(hermes, intentMessage):
     hermes.publish_end_session(current_session_id, result_sentence)
 
 if __name__ == "__main__":
-    #logging.basicConfig(filename='/home/pi/debug.log',level=logging.DEBUG)
+    logging.basicConfig(filename='/home/pi/debug.log',level=logging.DEBUG)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(14, GPIO.OUT)
     GPIO.output(14, GPIO.LOW)
-    #logging.debug('READY')
+    logging.debug('READY')
     with Hermes("localhost:1883") as h:
         h.subscribe_intent("jumahe:change-light", subscribe_intent_callback).start()
