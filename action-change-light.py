@@ -48,4 +48,4 @@ class SnipsConfigParser(ConfigParser.SafeConfigParser):
         GPIO.setup(14, GPIO.OUT)
         GPIO.output(14, GPIO.LOW)
         with Hermes("localhost:1883") as h:
-            h.subscribe_intent("change-light", subscribe_intent_callback).start()
+            h.subscribe_intent("jumahe:change-light", subscribe_intent_callback).start()
