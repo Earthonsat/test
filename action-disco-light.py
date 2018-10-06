@@ -41,7 +41,7 @@ def action_wrapper(hermes, intentMessage, conf):
     GPIO.output(14, GPIO.HIGH)
     sleep(0.5)
     GPIO.output(14, GPIO.LOW)
-    result_sentence = "D, I, S, C, O. C'est le mode disco !"
+    result_sentence = "H, E, L, L, O, FRIENDS !"
     hermes.publish_end_session(current_session_id, result_sentence)
 
 if __name__ == "__main__":
